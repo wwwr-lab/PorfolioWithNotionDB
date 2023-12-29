@@ -4,20 +4,20 @@ import Inner from '@/components/common/Inner';
 import Section from '@/components/common/Section';
 import SectionHeader from '@/components/common/SectionHeader';
 import DivisionLine from '@/components/common/DivisionLine';
-import { getSectionPage } from '@/api/getSection';
-import { retrieveBlockChildren } from '@/api/notionApi';
-import { FONT_SIZE, SIZE, SECTION } from '@/constants';
 
-import { isMobile } from 'react-device-detect';
+import { FONT_SIZE, SIZE, SECTION } from '@/constants';
+import { getSectionToggleBlocks, getChildrenBlockArr } from '@/api/getSectionToggleBlock';
+
 import {
 	ListBlockChildrenResponse,
 	ParagraphBlockObjectResponse,
-	PartialBlockObjectResponse,
+
 } from '@notionhq/client/build/src/api-endpoints';
 
 const skillsContainerStyle: CSSProperties = {
 	display: 'flex',
-	flexDirection: isMobile ? 'column' : 'row',
+	flexDirection: 'column',
+	width: '100%',
 };
 const listStyle: CSSProperties = {
 	width: '100%',
@@ -44,18 +44,13 @@ interface Props {
 }
 
 export default async function SectionSkills({ title, backgroundColor }: Props) {
-	const skillsResult = (await getSectionPage(SECTION.SKILLS)) as ListBlockChildrenResponse;
-	const skillsBlockIdArr = skillsResult?.results.map((result: PartialBlockObjectResponse) => result.id);
-	const skillsBlockArr = (await Promise.all(
-		skillsBlockIdArr?.map(async (id: string) => await retrieveBlockChildren(id))
-	)) as ListBlockChildrenResponse[];
+	const skillsSectionToggleBlockArr = await getSectionToggleBlocks(title);
+
 	const skillsDataArr = await Promise.all(
-		skillsBlockArr?.map(async (block: ListBlockChildrenResponse) => {
-			const idArr = block.results.map((result: PartialBlockObjectResponse) => result.id) as string[];
-			const blockArr = (await Promise.all(
-				idArr.map(async (id: string) => await retrieveBlockChildren(id))
-			)) as ListBlockChildrenResponse[];
+		skillsSectionToggleBlockArr.map(async (toggleBlock) => {
+			const blockArr = await getChildrenBlockArr(toggleBlock);
 			const blockContentArr = blockArr?.map((item: ListBlockChildrenResponse) => item.results);
+			
 			const name = (blockContentArr[0][0] as ParagraphBlockObjectResponse).paragraph.rich_text[0].plain_text as string;
 			const image = (blockContentArr[1][0] as any).image.file.url as string;
 			return { name, image };
@@ -67,7 +62,7 @@ export default async function SectionSkills({ title, backgroundColor }: Props) {
 				<Inner>
 					<div style={skillsContainerStyle}>
 						<SectionHeader>{title}</SectionHeader>
-						<DivisionLine direction="column" />
+						<DivisionLine direction="row" />
 						<ul style={listStyle}>
 							{skillsDataArr?.map((skillData: { name: string; image: string }) => (
 								<li key={skillData.name} style={listItemStyle}>
