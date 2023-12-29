@@ -5,13 +5,13 @@ import Inner from '@/components/common/Inner';
 import Section from '@/components/common/Section';
 import SectionHeader from '@/components/common/SectionHeader';
 import Carousel from '@/components/common/Carousel';
+import DivisionLine from '@/components/common/DivisionLine';
 
+import { ProjectDetailData } from '@/types';
+import {  FONT_SIZE, PROJECTS_DESCRIPTION, SECTION } from '@/constants';
 
 import styled from '@emotion/styled';
 import { isMobile } from 'react-device-detect';
-import { ProjectDetailData } from '@/types';
-import {  FONT_SIZE, PROJECTS_DESCRIPTION, SECTION } from '@/constants';
-import DivisionLine from '../common/DivisionLine';
 
 const ProjectsContainer = styled.div`
 	display: flex;

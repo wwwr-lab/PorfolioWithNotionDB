@@ -25,7 +25,7 @@ export default async function Home() {
 	const projectPageArr = (await Promise.all(
 		projectPageIdArr?.map(async (id: string) => await retrieveBlockChildren(id))
 	)) as ListBlockChildrenResponse[];
-	// console.log('projectPageArr', projectPageArr);
+
 	const projectPageToggleIdArrArr = projectPageArr.map((page: ListBlockChildrenResponse) =>
 		page.results.filter((result: any) => result.type === 'toggle').map((item: PartialBlockObjectResponse) => item.id)
 	);
@@ -43,7 +43,7 @@ export default async function Home() {
 			<Header backgroundColor={COLOR.WHITE} />
 			<main>
 				{!isMobile && <SectionCover backgroundColor={COLOR.WHITE} />}
-				<SectionAbout backgroundColor={COLOR.WHITE} />
+				<SectionAbout title={SECTION.ABOUT} backgroundColor={COLOR.WHITE} />
 				<SectionArchive title={SECTION.ARCHIVE} backgroundColor={COLOR.ORANGE} />
 				<SectionSkills title={SECTION.SKILLS} backgroundColor={COLOR.WHITE} />
 				<SectionProjects title={SECTION.PROJECTS} backgroundColor={COLOR.BLUE} dataArr={projectsDataArr} />

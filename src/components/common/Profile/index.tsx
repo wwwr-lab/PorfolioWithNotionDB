@@ -9,6 +9,9 @@ const listStyle: CSSProperties = {
 	flexDirection: 'column',
 	justifyContent: 'space-evenly',
 };
+const listItemStyle: CSSProperties = {
+	marginBottom: '1rem',
+};
 const listItemKeyStyle: CSSProperties = {
 	fontSize: FONT_SIZE.S,
 	fontWeight: FONT_WEIGHT.SEMI_BOLD,
@@ -25,33 +28,33 @@ interface Props {
 export default async function Profile({ dataArr }: Props) {
 	const profileItemBlockArr = await Promise.all(dataArr.map(async (data) => await retrieveBlockChildren(data.id)));
 	const profileItemValueBlockArr = profileItemBlockArr.map((block: ListBlockChildrenResponse) => block.results[0]);
-	console.log('profile', profileItemValueBlockArr);
+
 	const profileItemValueArr = profileItemValueBlockArr.map(
 		(block: any) => block.paragraph.rich_text[0].plain_text
 	) as string[];
 
 	return (
 		<ul style={listStyle}>
-			<li>
+			<li style={listItemStyle}>
 				<SectionHeader>{SECTION.ABOUT}</SectionHeader>
 			</li>
-			<li>
+			<li style={listItemStyle}>
 				<p style={listItemKeyStyle}>{PROFILE.NAME}</p>
 				<p style={listItemValueStyle}>{profileItemValueArr[0]}</p>
 			</li>
-			<li>
+			<li style={listItemStyle}>
 				<p style={listItemKeyStyle}>{PROFILE.AGE}</p>
 				<p style={listItemValueStyle}>{profileItemValueArr[1]}</p>
 			</li>
-			<li>
+			<li style={listItemStyle}>
 				<p style={listItemKeyStyle}>{PROFILE.ADDRESS}</p>
 				<p style={listItemValueStyle}>{profileItemValueArr[2]}</p>
 			</li>
-			<li>
+			<li style={listItemStyle}>
 				<p style={listItemKeyStyle}>{PROFILE.PHONE_NUMBER}</p>
 				<p style={listItemValueStyle}>{profileItemValueArr[3]}</p>
 			</li>
-			<li>
+			<li style={listItemStyle}>
 				<p style={listItemKeyStyle}>{PROFILE.EMAIL}</p>
 				<p style={listItemValueStyle}>{profileItemValueArr[4]}</p>
 			</li>
