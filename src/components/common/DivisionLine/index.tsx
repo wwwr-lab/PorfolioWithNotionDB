@@ -9,7 +9,7 @@ const rowLine: CSSProperties = {
 };
 const columnLine: CSSProperties = {
 	width: '0.1rem',
-	height: '100%',
+	height: 'inherit',
 	backgroundColor: `${COLOR.BLACK}`,
 	margin: '0 2rem',
 };

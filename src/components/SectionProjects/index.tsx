@@ -1,25 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+
 import Inner from '@/components/common/Inner';
 import Section from '@/components/common/Section';
 import SectionHeader from '@/components/common/SectionHeader';
 import Carousel from '@/components/common/Carousel';
-import { useInnerWidth } from '@/utils/useInnerWidth';
+
 
 import styled from '@emotion/styled';
-import { isDesktop, isMobile } from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 import { ProjectDetailData } from '@/types';
-import { COLOR, FONT_SIZE, PROJECTS_DESCRIPTION, SECTION } from '@/constants';
+import {  FONT_SIZE, PROJECTS_DESCRIPTION, SECTION } from '@/constants';
+import DivisionLine from '../common/DivisionLine';
 
 const ProjectsContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 `;
 const ProjectsSectionDescription = styled.p`
-	padding: 0.5rem 1.25rem 0;
+	padding: 0.5rem 1.25rem 0 0;
 	font-size: ${FONT_SIZE.S};
-	border-bottom: 0.1rem solid ${COLOR.BLACK};
 `;
 
 interface Props {
@@ -36,6 +36,7 @@ export default function SectionProjects({ title, backgroundColor, dataArr }: Pro
 				<ProjectsContainer>
 					<SectionHeader>{title}</SectionHeader>
 					<ProjectsSectionDescription>{PROJECTS_DESCRIPTION}</ProjectsSectionDescription>
+					<DivisionLine direction="row" />
 					<Carousel slidesPerView={isMobile ? 1 : 3} type="project" dataArr={dataArr} />
 				</ProjectsContainer>
 			</Inner>

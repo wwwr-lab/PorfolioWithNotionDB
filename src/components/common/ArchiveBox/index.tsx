@@ -15,6 +15,7 @@ const Box = styled.div`
 	border: 0.1rem solid ${COLOR.BLACK};
 	background-color: ${COLOR.WHITE};
 	padding: 1.5rem;
+	min-width: 40rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
@@ -33,7 +34,6 @@ const Anchor = styled(Link)`
 `;
 const ArchiveImageContainer = styled.div`
 	min-height: 30rem;
-	width: 40rem;
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -55,8 +55,8 @@ export default function ArchiveBox({ data, ...props }: Props) {
 			<Anchor href={link}>{link}</Anchor>
 			{isDesktop ? (
 				images?.map((image: string) => (
-					<ArchiveImageContainer>
-						<Image src={image} alt={`${name} Image`} fill key={image} style={{ objectFit: 'cover' }} />
+					<ArchiveImageContainer key={image}>
+						<Image src={image} alt={`${name} Image`} fill style={{ objectFit: 'cover' }} />
 					</ArchiveImageContainer>
 				))
 			) : (
