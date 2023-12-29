@@ -1,95 +1,54 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import Header from '@/components/common/Header';
+import Footer from '@/components/common/Footer';
+import SectionCover from '@/components/SectionCover';
+import SectionAbout from '@/components/SectionAbout';
+import SectionArchive from '@/components/SectionArchive';
+import SectionSkills from '@/components/SectionSkills';
+import SectionProjects from '@/components/SectionProjects';
+import SectionContact from '@/components/SectionContact';
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import { COLOR, FOOTER_TEXT, SECTION } from '@/constants';
+import { retrieveBlockChildren } from '@/api/notionApi';
+import { getProjects } from '@/api/getProject';
+import { extractProjectData } from '@/utils/extractProjectData';
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+import {
+	ListBlockChildrenResponse,
+	PageObjectResponse,
+	PartialBlockObjectResponse,
+} from '@notionhq/client/build/src/api-endpoints';
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+export default async function Home() {
+	const projectsDbData = (await getProjects()) as PageObjectResponse[];
+	const projectPageIdArr = projectsDbData?.map((projectDBData: PageObjectResponse) => projectDBData.id);
+	const projectPageArr = (await Promise.all(
+		projectPageIdArr?.map(async (id: string) => await retrieveBlockChildren(id))
+	)) as ListBlockChildrenResponse[];
+	// console.log('projectPageArr', projectPageArr);
+	const projectPageToggleIdArrArr = projectPageArr.map((page: ListBlockChildrenResponse) =>
+		page.results.filter((result: any) => result.type === 'toggle').map((item: PartialBlockObjectResponse) => item.id)
+	);
+	const projectsDataArr = [];
+	for (let i = 0; i < projectPageToggleIdArrArr.length; i++) {
+		projectsDataArr.push(
+			extractProjectData(
+				await Promise.all(projectPageToggleIdArrArr[i].map(async (id: string) => await retrieveBlockChildren(id)))
+			)
+		);
+	}
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+	return (
+		<div>
+			<Header backgroundColor={COLOR.WHITE} />
+			<main>
+				<SectionCover backgroundColor={COLOR.WHITE} />
+				<SectionAbout backgroundColor={COLOR.WHITE} />
+				<SectionArchive title={SECTION.ARCHIVE} backgroundColor={COLOR.ORANGE} />
+				<SectionSkills title={SECTION.SKILLS} backgroundColor={COLOR.WHITE} />
+				<SectionProjects title={SECTION.PROJECTS} backgroundColor={COLOR.BLUE} dataArr={projectsDataArr} />
+				<SectionContact title={SECTION.CONTACT} backgroundColor={COLOR.MINT} />
+			</main>
+			<Footer backgroundColor={COLOR.BROWN}>{FOOTER_TEXT}</Footer>
+		</div>
+	);
 }
