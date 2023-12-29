@@ -9,7 +9,7 @@ interface Props {
 export default function SectionCover({ backgroundColor }: Props) {
 	return (
 		<Section backgroundColor={backgroundColor} marginTop={SIZE.HEADER} height="40rem" borderColor="transparent">
-			<Image src="/ocean.png" alt="" fill style={{ objectFit: 'cover' }} />
+			<Image src="/ocean.png" alt="" fill style={{ objectFit: 'cover' }} priority />
 		</Section>
 	);
 }
