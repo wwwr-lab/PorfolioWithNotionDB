@@ -16,7 +16,7 @@ const Box = styled.div<{ isMobile: boolean }>`
 	margin: 0 1rem 1rem 0;
 	background-color: ${COLOR.WHITE};
 	padding: 1.5rem;
-	width: ${(props) => (props.isMobile ? '85vw' : '40rem')};
+	width: ${(props) => (props.isMobile ? '85vw' : '45rem')};
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;

@@ -1,7 +1,7 @@
 'use client';
 import { Dispatch, SetStateAction } from 'react';
 import Link from 'next/link';
-import { SECTION, FONT_SIZE, FONT_WEIGHT } from '@/constants';
+import { SECTION, FONT_SIZE, FONT_WEIGHT, COLOR } from '@/constants';
 import { useMobileView } from '@/utils/useMobileView';
 // import { useScrollDirection } from '@/utils/useScollDirection';
 import styled from '@emotion/styled';
@@ -12,8 +12,9 @@ const NavContainer = styled.nav<{ backgroundColor: string; isShown: boolean }>`
 `;
 const NavList = styled.ul<{ isMobile: boolean }>`
 	width: 100vw;
-	height: ${(props) => (props.isMobile ? 'auto' : '5rem')};
+	height: ${(props) => (props.isMobile ? 'auto' : '6rem')};
 	display: flex;
+	align-items: center;
 	flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
 	justify-content: ${(props) => (props.isMobile ? 'flex-start' : 'space-evenly')};
 `;
@@ -23,6 +24,11 @@ const NavListItem = styled.li`
 	font-size: ${FONT_SIZE.L};
 	font-weight: ${FONT_WEIGHT.BOLD};
 	text-align: center;
+	transition: all 0.2s ease-in-out;
+	&:hover {
+		font-size: ${FONT_SIZE.XL};
+		border-bottom: 0.5rem solid ${COLOR.BLACK};
+	}
 `;
 interface Props {
 	backgroundColor: string;
