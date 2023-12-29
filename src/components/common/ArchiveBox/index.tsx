@@ -1,21 +1,22 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useMobileView } from '@/utils/useMobileView';
 import { ArchiveData } from '@/types';
 import { COLOR, FONT_WEIGHT, FONT_SIZE } from '@/constants';
 
 import styled from '@emotion/styled';
-import { isDesktop } from 'react-device-detect';
 
 interface Props {
 	data: ArchiveData;
 }
 
-const Box = styled.div`
+const Box = styled.div<{ isMobile: boolean }>`
 	border: 0.1rem solid ${COLOR.BLACK};
+	margin: 0 1rem 1rem 0;
 	background-color: ${COLOR.WHITE};
 	padding: 1.5rem;
-	min-width: 40rem;
+	width: ${(props) => (props.isMobile ? '85vw' : '40rem')};
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
@@ -45,23 +46,20 @@ const ArchiveDescription = styled.p`
 `;
 export default function ArchiveBox({ data, ...props }: Props) {
 	const { name, logos, images, link, description } = data;
+	const isMobile = useMobileView();
 	return (
-		<Box {...props}>
+		<Box {...props} isMobile={isMobile}>
 			<LogoImageContainer>
 				{logos?.map((logo: string) => (
 					<Image src={logo} alt={`${name} Logo`} fill key={logo} style={{ objectFit: 'contain', width: '100%' }} />
 				))}
 			</LogoImageContainer>
 			<Anchor href={link}>{link}</Anchor>
-			{isDesktop ? (
-				images?.map((image: string) => (
-					<ArchiveImageContainer key={image}>
-						<Image src={image} alt={`${name} Image`} fill style={{ objectFit: 'cover' }} />
-					</ArchiveImageContainer>
-				))
-			) : (
-				<></>
-			)}
+			{images?.map((image: string) => (
+				<ArchiveImageContainer key={image}>
+					<Image src={image} alt={`${name} Image`} fill style={{ objectFit: 'cover' }} />
+				</ArchiveImageContainer>
+			))}
 			<ArchiveDescription>{description}</ArchiveDescription>
 		</Box>
 	);

@@ -1,36 +1,48 @@
-import { CSSProperties } from 'react';
+'use client';
+import { useMobileView } from '@/utils/useMobileView';
 import { COLOR } from '@/constants';
 
-const rowLine: CSSProperties = {
-	height: '0.1rem',
-	width: '100%',
-	backgroundColor: `${COLOR.BLACK}`,
-	margin: '2rem 0',
-};
-const columnLine: CSSProperties = {
-	width: '0.1rem',
-	height: 'inherit',
-	backgroundColor: `${COLOR.BLACK}`,
-	margin: '0 2rem',
-};
+import styled from '@emotion/styled';
 
+const RowLine = styled.div`
+	height: 0.1rem;
+	width: 100%;
+	background-color: ${COLOR.BLACK};
+	margin: 2rem 0;
+`;
+
+const ColumnLine = styled.div`
+	width: 0.1rem;
+	height: 100%;
+	background-color: ${COLOR.BLACK};
+	margin: 0 2rem;
+`;
 interface Props {
-	direction: 'row' | 'column';
+	direction?: 'row' | 'column';
+	responsive?: boolean;
 }
 
-export default function DivisionLine({ direction }: Props) {
+export default function DivisionLine({ direction, responsive }: Props) {
+	const isMobile = useMobileView();
+	if (responsive) {
+		isMobile ? (direction = 'row') : (direction = 'column');
+	}
 	switch (direction) {
 		case 'row':
 			return (
-				<div style={rowLine}>
-					<p style={{ display: 'none' }}>line</p>
-				</div>
+				<RowLine>
+					<p>
+						<span style={{ display: 'none' }}>line</span>
+					</p>
+				</RowLine>
 			);
 		case 'column':
 			return (
-				<div style={columnLine}>
-					<p style={{ display: 'none' }}>line</p>
-				</div>
+				<ColumnLine>
+					<p>
+						<span style={{ display: 'none' }}>line</span>
+					</p>
+				</ColumnLine>
 			);
 	}
 }

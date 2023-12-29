@@ -4,18 +4,15 @@ import Inner from '@/components/common/Inner';
 import Nav from '@/components/common/Nav';
 import IconButton from '@/components/common/IconButton';
 import { MenuIcon } from '@/assets/icons';
-import { TITLE, SIZE, FONT_SIZE, FONT_WEIGHT, COLOR } from '@/constants';
+import { TITLE, SIZE, FONT_SIZE, FONT_WEIGHT } from '@/constants';
+import { useMobileView } from '@/utils/useMobileView';
 
 import styled from '@emotion/styled';
-import { isMobile } from 'react-device-detect';
 
-interface Props {
-	backgroundColor: string;
-}
-const HeaderContainer = styled.header`
+const HeaderContainer = styled.header<{ isMobile: boolean }>`
 	position: fixed;
 	top: 0;
-	height: ${SIZE.HEADER};
+	height: ${(props) => (props.isMobile ? 'auto' : SIZE.HEADER)};
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -27,10 +24,10 @@ const HeaderTitleContainer = styled.div<{ backgroundColor: string }>`
 	display: flex;
 	justify-content: space-between;
 `;
-const HeaderTitle = styled.h1`
+const HeaderTitle = styled.h1<{ isMobile: boolean }>`
 	display: block;
-	text-align: ${isMobile ? 'start' : 'center'};
-	font-size: ${isMobile ? FONT_SIZE.XL : FONT_SIZE.XXXL};
+	text-align: ${(props) => (props.isMobile ? 'start' : 'center')};
+	font-size: ${(props) => (props.isMobile ? FONT_SIZE.XL : FONT_SIZE.XXXL)};
 	font-weight: ${FONT_WEIGHT.BOLD};
 
 	&:hover {
@@ -38,15 +35,19 @@ const HeaderTitle = styled.h1`
 	}
 `;
 
+interface Props {
+	backgroundColor: string;
+}
 export default function Header({ backgroundColor }: Props) {
 	const [isClicked, setIsClicked] = useState(false);
-	const scrollTopHandler = () => {
+	const scrollToTopHandler = () => {
 		window.scrollTo(0, 0);
 	};
+	const isMobile = useMobileView();
 	return (
-		<HeaderContainer style={{ backgroundColor: `${backgroundColor}` }}>
+		<HeaderContainer style={{ backgroundColor: `${backgroundColor}` }} isMobile={isMobile}>
 			<HeaderTitleContainer backgroundColor={backgroundColor}>
-				<HeaderTitle onClick={scrollTopHandler}>
+				<HeaderTitle onClick={scrollToTopHandler} isMobile={isMobile}>
 					<Inner>{TITLE}</Inner>
 				</HeaderTitle>
 				{isMobile && <IconButton onClick={() => setIsClicked(!isClicked)}>{MenuIcon}</IconButton>}
