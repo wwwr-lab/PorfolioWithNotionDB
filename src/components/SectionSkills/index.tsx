@@ -10,7 +10,6 @@ import { FONT_SIZE, SIZE, SECTION } from '@/constants';
 
 import { isMobile } from 'react-device-detect';
 import {
-	ImageBlockObjectResponse,
 	ListBlockChildrenResponse,
 	ParagraphBlockObjectResponse,
 	PartialBlockObjectResponse,
@@ -58,34 +57,13 @@ export default async function SectionSkills({ title, backgroundColor }: Props) {
 			)) as ListBlockChildrenResponse[];
 			const blockContentArr = blockArr?.map((item: ListBlockChildrenResponse) => item.results);
 			const name = (blockContentArr[0][0] as ParagraphBlockObjectResponse).paragraph.rich_text[0].plain_text as string;
-			const image = (blockContentArr[1][0] as ImageBlockObjectResponse).image.file.url as string;
+			const image = (blockContentArr[1][0] as any).image.file.url as string;
 			return { name, image };
 		})
 	);
 	return (
 		<Section backgroundColor={backgroundColor} id={SECTION.SKILLS}>
-			{isMobile ? (
-				<>
-					<div style={skillsContainerStyle}>
-						<SectionHeader>{title}</SectionHeader>
-						<DivisionLine direction="row" />
-						<ul style={listStyle}>
-							{skillsDataArr?.map((skillData) => (
-								<li key={skillData.name} style={listItemStyle}>
-									<Image
-										src={skillData.image}
-										height={SIZE.SKILL_IMG}
-										width={SIZE.SKILL_IMG}
-										style={{ objectFit: 'contain' }}
-										alt={`${skillData.name} Logo`}
-									/>
-									<span style={skillItemNameStyle}>{skillData.name}</span>
-								</li>
-							))}
-						</ul>
-					</div>
-				</>
-			) : (
+			{
 				<Inner>
 					<div style={skillsContainerStyle}>
 						<SectionHeader>{title}</SectionHeader>
@@ -106,7 +84,7 @@ export default async function SectionSkills({ title, backgroundColor }: Props) {
 						</ul>
 					</div>
 				</Inner>
-			)}
+			}
 		</Section>
 	);
 }

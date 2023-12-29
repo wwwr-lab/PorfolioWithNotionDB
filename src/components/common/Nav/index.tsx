@@ -1,10 +1,10 @@
 'use client';
+import { Dispatch, SetStateAction } from 'react';
 import Link from 'next/link';
-import { SECTION, FONT_SIZE, FONT_WEIGHT, COLOR } from '@/constants';
-
+import { SECTION, FONT_SIZE, FONT_WEIGHT } from '@/constants';
+// import { useScrollDirection } from '@/utils/useScollDirection';
 import styled from '@emotion/styled';
 import { isMobile } from 'react-device-detect';
-import { Dispatch, SetStateAction } from 'react';
 
 const NavContainer = styled.nav<{ backgroundColor: string; isShown: boolean }>`
 	background-color: ${(props) => props.backgroundColor};
@@ -31,8 +31,28 @@ interface Props {
 	setIsClicked: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function Nav({ backgroundColor, isShown,  setIsClicked }: Props) {
+export default function Nav({ backgroundColor, isShown, setIsClicked }: Props) {
 	const navList = [SECTION.ABOUT, SECTION.ARCHIVE, SECTION.SKILLS, SECTION.PROJECTS, SECTION.CONTACT];
+	// const [scrollDir, setScrollDir] = useState<string>();
+
+	// const handleScroll = (e: any) => {
+	// 	if (e.deltaY < 0) {
+	// 		setScrollDir('down');
+	// 	}
+	// 	if (e.deltaY > 0) {
+	// 		setScrollDir('up');
+	// 	}
+	// };
+	// useEffect(() => {
+	// 	window.addEventListener('mousewheel', (e) => {
+	// 		handleScroll(e);
+	// 	});
+	// 	return () => {
+	// 		window.removeEventListener('mousewheel', (e) => {
+	// 			handleScroll(e);
+	// 		});
+	// 	};
+	// }, []);
 
 	return (
 		<>
