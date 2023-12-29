@@ -12,6 +12,7 @@ import { retrieveBlockChildren } from '@/api/notionApi';
 import { getProjects } from '@/api/getProject';
 import { extractProjectData } from '@/utils/extractProjectData';
 
+import { isMobile } from 'react-device-detect';
 import {
 	ListBlockChildrenResponse,
 	PageObjectResponse,
@@ -41,7 +42,7 @@ export default async function Home() {
 		<div>
 			<Header backgroundColor={COLOR.WHITE} />
 			<main>
-				<SectionCover backgroundColor={COLOR.WHITE} />
+				{!isMobile && <SectionCover backgroundColor={COLOR.WHITE} />}
 				<SectionAbout backgroundColor={COLOR.WHITE} />
 				<SectionArchive title={SECTION.ARCHIVE} backgroundColor={COLOR.ORANGE} />
 				<SectionSkills title={SECTION.SKILLS} backgroundColor={COLOR.WHITE} />

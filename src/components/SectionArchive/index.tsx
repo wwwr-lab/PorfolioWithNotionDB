@@ -5,6 +5,7 @@ import SectionHeader from '@/components/common/SectionHeader';
 import ArchiveBox from '@/components/common/ArchiveBox';
 import DivisionLine from '@/components/common/DivisionLine';
 import { SECTION } from '@/constants';
+import { ArchiveData } from '@/types';
 import { getSectionPage } from '@/api/getSection';
 import { retrieveBlockChildren } from '@/api/notionApi';
 
@@ -23,8 +24,13 @@ interface Props {
 
 const archivesContainerStyle: CSSProperties = {
 	display: 'flex',
-	justifyContent: isMobile ? 'flex-start' : 'space-around',
-	flexDirection: isMobile ? 'column' : 'row',
+	flexDirection: 'column',
+};
+const archiveBoxsContainerStyle: CSSProperties = {
+	display: 'flex',
+	flexWrap: 'wrap',
+	justifyContent: isMobile ? 'flex-start' : 'space-evenly',
+	gap: '1rem',
 };
 
 export default async function SectionArchive({ title, backgroundColor }: Props) {
@@ -40,10 +46,10 @@ export default async function SectionArchive({ title, backgroundColor }: Props) 
 			const blockContentArr = blockArr.map((item) => item.results);
 			const name = (blockContentArr[0][0] as ParagraphBlockObjectResponse).paragraph.rich_text[0].plain_text as string;
 			const logos = (blockContentArr[1] as ImageBlockObjectResponse[]).map(
-				(item: ImageBlockObjectResponse) => item.image.file.url
+				(item: any) => item.image.file.url
 			) as string[];
 			const images = (blockContentArr[2] as ImageBlockObjectResponse[]).map(
-				(item: ImageBlockObjectResponse) => item.image.file.url
+				(item: any) => item.image.file.url
 			) as string[];
 			const link = (blockContentArr[3][0] as ParagraphBlockObjectResponse).paragraph.rich_text[0].plain_text as string;
 			const description = (blockContentArr[4][0] as ParagraphBlockObjectResponse).paragraph.rich_text[0]
@@ -61,11 +67,15 @@ export default async function SectionArchive({ title, backgroundColor }: Props) 
 		<Section backgroundColor={backgroundColor} id={SECTION.ARCHIVE}>
 			<Inner>
 				<div style={archivesContainerStyle}>
-					<SectionHeader>{title}</SectionHeader>
-					<DivisionLine direction={isMobile ? 'row' : 'column'} />
-					{archiveDataArr.map((archiveData: any) => (
-						<ArchiveBox data={archiveData} key={archiveData.request_id} />
-					))}
+					<div>
+						<SectionHeader>{title}</SectionHeader>
+						<DivisionLine direction="row" />
+					</div>
+					<div style={archiveBoxsContainerStyle}>
+						{archiveDataArr.map((archiveData: ArchiveData) => (
+							<ArchiveBox data={archiveData} key={archiveData.name} />
+						))}
+					</div>
 				</div>
 			</Inner>
 		</Section>
