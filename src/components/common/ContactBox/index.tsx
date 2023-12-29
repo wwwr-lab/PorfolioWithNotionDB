@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 import { COLOR, FONT_SIZE, FONT_WEIGHT } from '@/constants';
 import { useMobileView } from '@/utils/useMobileView';
@@ -15,13 +16,25 @@ const ListItem = styled.li<{ isMobile: boolean }>`
 	width: ${(props) => (props.isMobile ? '80vw' : '35rem')};
 `;
 
-interface Props extends PropsWithChildren {}
+interface Props extends PropsWithChildren {
+	type: 'email' | 'phone';
+}
 
-export default function ContactBox({ children, ...props }: Props) {
+export default function ContactBox({ children, type, ...props }: Props) {
 	const isMobile = useMobileView();
+	const defineLinkAddress = (children: any) => {
+		switch (type) {
+			case 'email':
+				return `mailto:${children}`;
+			case 'phone':
+				return `tel:${children}`;
+		}
+	};
 	return (
 		<ListItem isMobile={isMobile} {...props}>
-			{children}
+			<Link href={defineLinkAddress(children)}>
+				<p>{children}</p>
+			</Link>
 		</ListItem>
 	);
 }

@@ -38,7 +38,7 @@ export default async function SectionContact({ title, backgroundColor }: Props) 
 							<p style={contactListItemKeyStyle}>이메일</p>
 							<ul>
 								{emailBlock.map((item) => (
-									<ContactBox key={item.paragraph.rich_text[0].plain_text}>
+									<ContactBox type="email" key={item.paragraph.rich_text[0].plain_text}>
 										{item.paragraph.rich_text[0].plain_text}
 									</ContactBox>
 								))}
@@ -48,7 +48,7 @@ export default async function SectionContact({ title, backgroundColor }: Props) 
 							<p style={contactListItemKeyStyle}>전화번호</p>
 							<ul>
 								{numberBlock.map((item) => (
-									<ContactBox key={item.paragraph.rich_text[0].plain_text}>
+									<ContactBox type="phone" key={item.paragraph.rich_text[0].plain_text}>
 										{item.paragraph.rich_text[0].plain_text}
 									</ContactBox>
 								))}
