@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 리팩토링 계획서
 
-## Getting Started
+---
 
-First, run the development server:
+## 구현 예정 목록
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [ ] 페이지 구분 - /, /about, /projects, /contact
+- [ ] 전체적인 UI 변경
+- [ ] projects.json 추가 (디비에서 가져와서 생성)
+- [ ] 프로젝트 상세 글 페이지 추가 - /projects/[projectTitle]
+- [ ] 상태 관리 라이브러리 (선택)
+- [ ] 리팩토링
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 상세 설명
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### 1. 페이지 구분 
 
-## Learn More
+- [ ] 루트 별로 페이지 생성
 
-To learn more about Next.js, take a look at the following resources:
+### 2. 전체적인 UI 변경 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [ ] 스토리북 도입도 고민하기
+- [ ] 파일, 컴포넌트 구조 잡기
+- [ ] 서버, 클라이언트 구분하기
+- [ ] 페이지 구현
+  - [ ] HomePage
+  - [ ] AboutPage
+  - [ ] ProjectsPage
+  - [ ] ContactPage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### 3. projects.json
 
-## Deploy on Vercel
+- [ ] 디비에서 데이터 읽기
+  - [ ] notion api 사용하기
+- [ ] 읽어온 데이터 가공하기 (원하는 형태로)
+  ```
+  type Project = {
+    title : string; //=> 프로젝트 제목
+    id : string; //=> 게시물 가져올 때 해당 블록(상세 게시물 페이지 블록) id가 필요하다.
+    image : string //=> 프로젝트 대표 이미지( 카드에서 보여준다. )
+    description : {
+      people : string //=> 작업 인원
+      term : string //=> 작업 기간
+      paragraph: string // => 무슨 프로젝트인지 한 줄로 설명 (key 값 변경될 수 있음)
+    };
+    pinned : boolean //=> 첫 화면에 꼭 보여야 하는 중요한 프로젝트 표시
+    category: 'FrontEnd' | 'BackEnd' | 'FullStack' => 프로젝트 게시물 카테고리(기능 구현 파트)  
+  }       
+  ```
+- [ ] json 형태로 만들기 
+- [ ] json 파일 불러서 읽는 함수 만들기 - /src/service/data.ts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 4. 프로젝트 상세 글 페이지 추가
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [ ] 경로 : /projects/[projectTitle]
+- [ ] 노션 상세 게시물 페이지에서 게시물 export 하기
+- [ ] 게시물 마크다운 형식으로 변환하기
+- [ ] 마크다운 읽는(불러오는) 함수 만들기 - /src/service/posts.ts
+- [ ] 마크다운 파싱하기 - 라이브러리 사용
+- [ ] 페이지에 내용 뿌려주기
+- [ ] 프로젝트 상세 게시물 업데이트하기
+
+### 5. 상태 관리 라이브러리 (선택)
+
+- [ ] RTK(ReduxToolkit), Zustand, Recoil 비교하기
+- [ ] 사용법 익히기
+
+### 리팩토링
+
+#### 성능/기능/편의성 개선
+
+- [ ] Next.js에서 제공하는 Link, Font, Image 등 적극 활용 - 최적화
+  - [ ] 각 태그들이 어떤 기능이 있는지 공부하기
+- [ ] SEO 향상
+  - [ ] meta
+  - [ ] symentic tag
+  - [ ] ...more 
+- [ ] 반응형 확인하기
+  - [ ] 모바일
+  - [ ] 태블릿, 데스크탑 등
+  - [ ] 다양한 기기, 브라우저, OS에서 테스트해보기
+
+#### 유지보수 
+
+- [ ] 크기 단위 (e.g. rem) 통일하기 ( 1rem = 10px )
+- [ ] tailwindconfig.js 활용하여 중복코드 줄이기
+- [ ] 함수명, 변수명은 기능을 한번에 알 수 있게 명시적으로 작성
+- [ ] 하나의 함수는 하나의 기능만
+- [ ] 타입스크립트 확인하기
+- [ ] README.md 작성하기
+  - [ ] 파일 구조, 컴포넌트 구조 - 트리 
+  - [ ] 이력서에서 포로젝트 상세 설명에 해당하는 코드
+- [ ] 테스트 코드 작성하기(선택) - Jest
+
+
+
+## 회고 목록
+
+- 각 기술스택 사용한 이유, 활용한 예시(코드)
+  - [ ] 프로젝트 Portfolio 상세 설명 업데이트
+  - [ ] 이력서 업데이트 
+- 새로 알게된, 다시 알게된 (공부한) 부분
+  - [ ] 블로그 글 작성
+  - [ ] 프로젝트 Portfolio 상세 설명 업데이트
+  - [ ] 이력서 업데이트
+- 어려웠던, 힘들었던 부분, 오래 걸린 부분 등 
+  - [ ] 블로그 글 작성
+  - [ ] 프로젝트 Portfolio 상세 설명 업데이트    
+- 아쉬운 부분
+  - [ ] 프로젝트 Portfolio 상세 설명 업데이트 
+
